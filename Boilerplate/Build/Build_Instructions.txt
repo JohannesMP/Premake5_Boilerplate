@@ -1,0 +1,15 @@
+- Make sure you have Premake5 Installed and on your system Path
+  (http://premake.github.io/download.html)
+
+  1. cd into ROOT (where premake5.lua is located)
+  2. run premake to generate the project folder
+    - To generate a make file (Mac/Linux/Windows)
+        premake5 gmake
+    - On Windows to create a visual studio Solution (Windows only, assuming VS2015 installed)
+        premake5 vs2015
+  3. CD into the resulting project_... folder
+  4. Build project as usual
+    - For make file, running 'make' will run the first option defined in the Makefile
+       - Each Project in your workspace has its own folder.
+    - For visual studio, just launch the solution file.
+
