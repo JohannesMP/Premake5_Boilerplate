@@ -2,8 +2,8 @@
   Helper functions for premake projects
 
   usage: 
-    StartProject("MyProjectName", "ConsoleApp")
-    AddProjectSource("Source/Path")
+    StartProject("MyProjectName", "ConsoleApp") -- sets up a new Project
+    AddProjectSource("Source/Path")             -- adds source files to project
 --]========================================================================]
 
 -- Handle no valid action.
@@ -15,24 +15,13 @@ if not _ACTION then error("No action defined!") end
 ----------------------------
 -- NOTE: DO NOT MODIFY HERE. Instead copy into premake5.lua then modify there.
 
-
 -- The path from premake5.lua to get to the project root.
 ROOT = "./" 
-
 -- The folder that will contain the project/solution files
 WORKSPACE = ROOT .. "project_" .. os.get() .. "_" .. _ACTION .. "/"
-
 -- If compile/link warnings should be treated as errors
 TREAT_WARNINGS_AS_ERRORS = false;
 
-
-
-
-
-
-
--- HELPER FUNCTIONS --
-----------------------
 
 
 
@@ -58,7 +47,7 @@ function StartProject(proj_name, proj_kind)
   -- COMPILER/LINKER --
   ---------------------
     if TREAT_WARNINGS_AS_ERRORS then flags { "FatalWarnings" } end -- All warnings on.
-                                                                   -- 
+
     local using_clang = false      -- workaround for premake issue #257
 
     filter { "action:gmake" }
@@ -67,8 +56,7 @@ function StartProject(proj_name, proj_kind)
       buildoptions { "-std=c++11" }
 
     filter { "system:windows", "action:vs*"}
-      buildoptions  { "/MP" }               -- Enable multithreading (requires minimal rebuild to be disabled.)
-      flags         { "NoMinimalRebuild" }  -- Required for multithreading (basically setting /Gm to /Gm- )
+      flags         { "MultiProcessorCompile", "NoMinimalRebuild" }
       linkoptions   { "/ignore:4099" }      -- Ignore library pdb warnings when running in debug
 
     filter {} -- clear filter
@@ -101,6 +89,9 @@ end
 
 -- add files to be included (and possibly compiled)
 function AddProjectSource(src_path, is_included)
+  
+  if(is_included == nil ) then is_included = true end
+
   files
   {
     src_path .. "**.cpp",
