@@ -59,13 +59,14 @@ function StartProject(proj_name, proj_kind)
       flags         { "MultiProcessorCompile", "NoMinimalRebuild" }
       linkoptions   { "/ignore:4099" }      -- Ignore library pdb warnings when running in debug
 
-    filter {} -- clear filter
+    filter {"system:linux"}
+      -- http://libcxx.llvm.org/
+      if(using_clang) then -- workaround for premake issue #257
+        buildoptions { "-stdlib=libc++" } 
+        linkoptions  { "-stdlib=libc++" }
+      end
 
-    -- http://libcxx.llvm.org/
-    if(using_clang) then -- workaround for premake issue #257
-      buildoptions { "-stdlib=libc++" } 
-      linkoptions  { "-stdlib=libc++" }
-    end
+    filter {} -- reset filter
 end
 
 
